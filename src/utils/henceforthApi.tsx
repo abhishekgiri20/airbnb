@@ -1,19 +1,15 @@
 import { parseCookies } from "nookies";
 import superagent from "superagent";
-// const SuperagentPromise = require("superagent-promise");
-// const superagent = SuperagentPromise(_superagent, global.Promise);
 const API_ROOT = "https://airbnbclone.henceforthsolutions.com:8081/api/";
 
 let token: any = null;
 
 const tokenPlugin = (req: any) => {
   let cookies = parseCookies(null, 'accessToken')
-  console.log(cookies,'colokes')
   if(cookies.accessToken){
     req.set('Authorization', `Bearer ${cookies.accessToken}`);
 
   }
-  console.log(cookies.accessToken, "token.....")
 }
 
 const responseBody = (res: any) => res.body;
@@ -45,7 +41,7 @@ const Auth = {
    documentImgUplaod: (info:any) => requests.file("document-upload","document", info),
    getDocumentData: () => requests.get("document"),
    deleteDocument: (id:any) => requests.del(`document/${id}`),
-
+   editUserDocuments:(info:any, id:any) => requests.put(`document/${id}`,info)
   }
 
   const host = {

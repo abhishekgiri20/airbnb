@@ -15,9 +15,7 @@ const index = () => {
     try {
         const apiRes = await henceforthApi.Auth.getDocumentData();
         const data = apiRes.data;
-        setDocumentData(data);
-        console.log("documentdata........",data);
-       
+        setDocumentData(data);       
     } catch (error) {
         console.log("Error in getting document data",error)
     }
@@ -32,7 +30,6 @@ const index = () => {
     try {
         const apiRes = await henceforthApi.Auth.deleteDocument(id);
         getDocumentData();
-        console.log("document delete.......",apiRes)
     } catch (error) {
         console.log("error in deleting document",error)
     }
@@ -93,7 +90,7 @@ const index = () => {
                         
                         
                         <div className='document-btns  pt-3 w-100 d-flex  justify-content-between' >
-                            <div><button className='btn text-white px-4 me-3' style={{backgroundColor:"#32cd32"}}><span className='text-white px-2'><MdModeEditOutline /></span>Edit</button></div>
+                        <Link className='btn btn-primary text-white shadow-none py-2 px-4' href={`/account/personal/document/${documentData[0]?.id}/edit`} style={{backgroundColor:"#32cd32",border:"1px solid #32cd32"}}><span className='text-white px-2'><MdModeEditOutline /></span>Edit</Link>
                             <div><button className='btn text-white px-3' style={{backgroundColor:'red'}} onClick={handleDocumentDelete}><span className=' px-2'><MdDelete /></span>Delete</button></div>
                         </div>
                     </div>

@@ -27,9 +27,9 @@ const index = () => {
   const router = useRouter();
   let id = editData[0]?.id;
  
-  const getHostData = async() =>{
+  const getUserData = async() =>{
         try {
-            const apiRes = await henceforthApi.host.getHostDocumentData();
+            const apiRes = await henceforthApi.Auth.getDocumentData();
             const data = apiRes.data;
             setEditData(data);
             setOldFrontImage(data[0].document);
@@ -49,7 +49,7 @@ const index = () => {
   }
 
   useEffect(()=>{
-    getHostData();
+    getUserData();
   },[])
 
 
@@ -77,7 +77,7 @@ const index = () => {
 
   const handleFrontImgUpload = async() =>{
     try {
-     const apiRes = await henceforthApi.host.hostDocumentImgUplaod(newFrontImage);
+     const apiRes = await henceforthApi.Auth.documentImgUplaod(newFrontImage);
       return apiRes.data;
     } catch (error) {
       console.log("error in uplaodig document img", error)
@@ -86,7 +86,7 @@ const index = () => {
 
   const handBackImgUpload = async() =>{
     try {
-     const apiRes = await henceforthApi.host.hostDocumentImgUplaod(newBackImage);
+     const apiRes = await henceforthApi.Auth.documentImgUplaod(newBackImage);
       return apiRes.data;
     } catch (error) {
       console.log("error in uplaodig document img", error)
@@ -95,10 +95,9 @@ const index = () => {
 
 
 
-  //handle host  edit document frorm upload
-  const handleDocumentUpload = async(values:any) => {
+  //handle user  edit document frorm upload
+  const handleUserDocumentUpload = async(values:any) => {
    setShowSpin(true);
-   debugger
    let backImgResponse = "null";
    let document_name = "";
    let frontImgResponse = await handleFrontImgUpload();
@@ -115,8 +114,8 @@ const index = () => {
         document_back: backImgResponse,
       }
     
-      const apiRes = await henceforthApi.host.editHostDocuments(id, payload);
-      router.push("/account/business/document"); 
+      const apiRes = await henceforthApi.Auth.editUserDocuments(id, payload);
+      router.push("/account/personal/document"); 
       setShowSpin(false);
     } catch (error:any) {
       // alert(`${error.response.body.message}`)  
@@ -166,7 +165,7 @@ const index = () => {
         <div className="container">
             <div className="row">
                 <div className='d-flex gap-2' style={{marginTop:"150px"}}>
-                    <div><Link href="/account/business/document" className='text-dark'>Business Account</Link></div>
+                    <div><Link href="/account/business/document" className='text-dark'>User Profile</Link></div>
                     <div><span><MdOutlineKeyboardArrowRight/></span></div>
                     <div><p>Document    </p></div>
                     <div><span><MdOutlineKeyboardArrowRight/></span></div>
@@ -178,7 +177,7 @@ const index = () => {
                     <div className='mb-5'><h4>Edit Document</h4></div>
                     <div className='w-75'>
                       <Spin spinning={showSpin}>
-                        <Form layout="vertical" onFinish={handleDocumentUpload} onValuesChange={handleValueChange} form={form}>
+                        <Form layout="vertical" onFinish={handleUserDocumentUpload} onValuesChange={handleValueChange} form={form}>
                             <Form.Item name="issued_country" label="Select the issuing country/region" rules={[{ required: true, message: "Please enter issued_country" }]}>
                                 <Select placeholder="Select" size='large' showSearch allowClear>
                                     {country_name && country_name.map((res) => (

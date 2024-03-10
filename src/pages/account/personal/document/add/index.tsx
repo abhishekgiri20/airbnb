@@ -23,7 +23,6 @@ const index = () => {
 
     const props: UploadProps = {
         name: 'file',
-        // action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
         headers: {
           authorization: 'authorization-text',
         },
@@ -119,8 +118,6 @@ const index = () => {
      
     }
 
-  
-
   return (
     <>
       {contextHolder}
@@ -163,7 +160,7 @@ const index = () => {
                                   <p >Upload front</p>
                                     {
                                       frontImg?
-                                      <div style={{height:"200px",width:"300px", margin:"10px 0 20px 0"}}>
+                                      <div style={{height:"200px",width:"300px", margin:"10px 0 48px 0"}}>
                                         <img src={URL.createObjectURL(frontImg)} alt="" className='w-100 h-100 object-fit-cover position-relative ' />
                                         <span className='frontImg position-absolute text-danger' style={{left:"280px",zIndex:"2"}} onClick={()=>handleImageShown(2)}><ImCross /></span>
                                      </div>
@@ -184,7 +181,7 @@ const index = () => {
                                     <p >Upload Back</p>
                                     {
                                       backImg?
-                                      <div style={{height:"200px",width:"300px", margin:"10px 0 20px 0"}}>
+                                      <div style={{height:"200px",width:"300px", margin:"10px 0 48px 0"}}>
                                         <img src={URL.createObjectURL(backImg)} alt="" className='w-100 h-100 object-fit-cover position-relative ' />
                                         <span className='backImg position-absolute text-danger' style={{left:"600px",zIndex:"2"}} onClick={handleImageShown}><ImCross /></span>
                                       </div>
@@ -203,7 +200,7 @@ const index = () => {
                                 <p >Upload front</p>
                                 {
                                   frontImg?
-                                   <div style={{height:"200px", margin:"10px 0 20px 0"}}>
+                                   <div style={{height:"200px", margin:"10px 0 48px 0"}}>
                                     <img src={URL.createObjectURL(frontImg)} alt="" className='w-100 h-100 object-fit-cover position-relative ' />
                                     <span className=' position-absolute text-danger' style={{left:"620px",zIndex:"2"}} onClick={()=>handleImageShown(2)}><ImCross /></span>
                                    </div>
@@ -218,7 +215,6 @@ const index = () => {
                             } 
 
                             <div className='d-flex gap-4'>
-                  
                               <Form.Item>
                                 <Button type='primary' htmlType="submit"style={{backgroundColor:"#32CD32"}} size="large">Submit</Button>
                               </Form.Item>
