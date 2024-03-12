@@ -9,13 +9,13 @@ import { MdModeEditOutline } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 const index = () => {
 
-  const [documentData, setDocumentData] = useState<any>([]);
-
+  const [documentData, setDocumentData] = useState<any>({});
+  console.log("documentdata..",documentData)
   const getDocumentData = async() =>{
     try {
         const apiRes = await henceforthApi.Auth.getDocumentData();
         const data = apiRes.data;
-        setDocumentData(data);       
+        setDocumentData(data[0]);       
     } catch (error) {
         console.log("Error in getting document data",error)
     }
@@ -26,7 +26,7 @@ const index = () => {
 
 
   const handleDocumentDelete = async() =>{
-    let id = documentData[0]?.id;
+    let id = documentData?.id;
     try {
         const apiRes = await henceforthApi.Auth.deleteDocument(id);
         getDocumentData();
@@ -53,11 +53,11 @@ const index = () => {
             <div className="col-7 ">
                 <div className='mb-4'><h4>Documents</h4></div>
                 {
-                    documentData.length?
+                    documentData?
                     <div className='border p-4' style={{ width: "300px", height: "250px" }}>
                         <div className='d-flex justify-content-between'>
                            <div className="document-name">
-                              <p>{documentData[0]?.document_name}</p>
+                              <p>{documentData?.document_name}</p>
                            </div>
                            <div>
                               <p className='text-danger'>Not Verified</p>
@@ -65,22 +65,22 @@ const index = () => {
                         </div>
                        
                             {
-                              (documentData[0]?.document_type == 2)?
+                              (documentData?.document_type == 2)?
                                 <div className="image-container">
                                     <div>
-                                     <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData[0]?.document}` } alt="Document"/>
+                                        <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData?.document}` } alt="Document"/>
                                     </div>
                                 </div>
                                 :
                                 <div className='d-flex gap-3'>
                                     <div className="image-container">
                                         <div>
-                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData[0]?.document}` } alt="Document"/>
+                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData?.document}` } alt="Document"/>
                                         </div>
                                     </div> 
                                     <div className="image-container">
                                         <div>
-                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData[0]?.document_back}` } alt="Document"/>
+                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData?.document_back}` } alt="Document"/>
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +90,7 @@ const index = () => {
                         
                         
                         <div className='document-btns  pt-3 w-100 d-flex  justify-content-between' >
-                        <Link className='btn btn-primary text-white shadow-none py-2 px-4' href={`/account/personal/document/${documentData[0]?.id}/edit`} style={{backgroundColor:"#32cd32",border:"1px solid #32cd32"}}><span className='text-white px-2'><MdModeEditOutline /></span>Edit</Link>
+                        <Link className='btn btn-primary text-white shadow-none py-2 px-4' href={`/account/personal/document/${documentData?.id}/edit`} style={{backgroundColor:"#32cd32",border:"1px solid #32cd32"}}><span className='text-white px-2'><MdModeEditOutline /></span>Edit</Link>
                             <div><button className='btn text-white px-3' style={{backgroundColor:'red'}} onClick={handleDocumentDelete}><span className=' px-2'><MdDelete /></span>Delete</button></div>
                         </div>
                     </div>
@@ -103,7 +103,7 @@ const index = () => {
             <div className="col-5">
                 <div className="add-btn text-end  me-5 ">
                     {
-                        documentData.length?""
+                        documentData?""
                         :
                         <button className='p-2 border-0 rounded' style={{backgroundColor:"#32CD32"}}><Link href="/account/personal/document/add" className='text-white'>Add Document</Link></button>
                     }

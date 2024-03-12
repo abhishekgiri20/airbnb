@@ -18,11 +18,11 @@ const Header = () => {
   const profileData = useSelector((state:any) => state.user);
   const dispatch = useDispatch();
   const cookies = parseCookies();
-  const [token,settoken] = useState('')
+  const [token,setToken] = useState('')
   const router = useRouter()
 
   useEffect(()=>{
-    settoken(cookies.accessToken);
+    setToken(cookies.accessToken);
   },[])
 
 
@@ -31,8 +31,9 @@ const Header = () => {
   const handleLogout = () =>{
     destroyCookie(null, 'accessToken');
     dispatch(setData({})); 
-    settoken("");
     router.push("/");
+    setToken("");
+   
 
   }
 

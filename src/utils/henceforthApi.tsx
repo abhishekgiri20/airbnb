@@ -41,7 +41,8 @@ const Auth = {
    documentImgUplaod: (info:any) => requests.file("document-upload","document", info),
    getDocumentData: () => requests.get("document"),
    deleteDocument: (id:any) => requests.del(`document/${id}`),
-   editUserDocuments:(info:any, id:any) => requests.put(`document/${id}`,info)
+   editUserDocuments:(id:any,info:any) => requests.put(`document/${id}`,info),
+   getInContact: (info:any) => requests.post("contact-us", info)
   }
 
   const host = {
@@ -49,7 +50,7 @@ const Auth = {
     hostDocumentImgUplaod: (info:any) => requests.file("host/document-upload","document", info),
     getHostDocumentData: () => requests.get("host/host-document"),
     deleteHostDocument: (id:any) => requests.del(`host/host-document/${id}`),
-    editHostDocuments: (info:any, id:any) => requests.put(`host/host-document/${id}`, info)
+    editHostDocuments: (id:any,info:any) => requests.put(`host/host-document/${id}`, info)
 
   }
 

@@ -9,6 +9,7 @@ import destination1  from "../assets/destination.png";
 import destination2 from "../assets/destination2.png";
 import destination3 from "../assets/destination3.png";
 import homebanner from "../assets/homepagebanner.png";
+import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -29,7 +30,7 @@ export default function Home() {
                 <div className="home-page text-start">
                   <img src={henceforthbanner.src} alt="" className="w-100" />
                   <div className="home-text w-100">INTRODUCING <br/><span >Henceforth</span></div>
-                  <div className="home-button"><button className="btn px-4 py-2 fs-5 border-0" style={{backgroundColor:"#fff"}}>About Us</button></div>
+                  <div className="home-button"><Link href="/about-us" className="btn px-4 py-2 fs-5 border-0" style={{backgroundColor:"#fff"}}>About Us</Link></div>
                 </div>
                 <div className="explore-items text-start">
                   <h4>Explore the world with Airbnb Clone</h4>

@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 const index = () => {
   
 
-  const [editData, setEditData] = useState<any>([]);
+  const [editData, setEditData] = useState<any>({});
   const [oldFrontImage, setOldFrontImage] = useState<any>(null);
   const [oldBackImage, setOldBackImage] = useState<any>(null);
   const [newFrontImage, setNewFrontImage] = useState<any>(null);
@@ -22,16 +22,15 @@ const index = () => {
   const [showBack, setShowBack] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
   const [showSpin, setShowSpin] = useState(false);
- 
   const [form] = Form.useForm();
   const router = useRouter();
-  let id = editData[0]?.id;
+  let id = editData?.id;
  
-  const getHostData = async() =>{
+  const getHostDocData = async() =>{
         try {
             const apiRes = await henceforthApi.host.getHostDocumentData();
             const data = apiRes.data;
-            setEditData(data);
+            setEditData(data[0]);
             setOldFrontImage(data[0].document);
             setOldBackImage(data[0].document_back);
             if(data[0]?.document_type == 1){
@@ -41,15 +40,13 @@ const index = () => {
               issued_country: data[0]?.issued_country,
               document_type: data[0]?.document_name,
             });
-          console.log("host data....",data)
-          
         } catch (error) {
             console.log("error in get host data", error)
         }
   }
 
   useEffect(()=>{
-    getHostData();
+    getHostDocData();
   },[])
 
 
@@ -97,11 +94,11 @@ const index = () => {
 
   //handle host  edit document frorm upload
   const handleDocumentUpload = async(values:any) => {
+
    setShowSpin(true);
-   debugger
    let backImgResponse = "null";
    let document_name = "";
-   let frontImgResponse = await handleFrontImgUpload();
+   let frontImgResponse =  oldFrontImage ? oldFrontImage : await handleFrontImgUpload();
    if(values.document_type == 1){
         backImgResponse =  await handBackImgUpload();
         document_name = "aadhar card"
@@ -109,7 +106,7 @@ const index = () => {
     try {
       let payload = {
         issued_country: values.issued_country,
-        document_name:  document_name  ,
+        document_name:  document_name,
         document: frontImgResponse,
         document_type: values.document_type,
         document_back: backImgResponse,
@@ -127,9 +124,13 @@ const index = () => {
 
   const handleValueChange = (values:any) => {
       if(values.document_type == 1){
-        setShowBack(true);  
-      }else  setShowBack(false);
-      console.log(values,"form value")
+        setShowBack(true);
+        setEditData({...editData, document_type:1});
+      }else{
+        setShowBack(false);
+        setEditData({...editData, document_type:2});
+      }  
+     
    }
 
 
@@ -167,9 +168,9 @@ const index = () => {
             <div className="row">
                 <div className='d-flex gap-2' style={{marginTop:"150px"}}>
                     <div><Link href="/account/business/document" className='text-dark'>Business Account</Link></div>
-                    <div><span><MdOutlineKeyboardArrowRight/></span></div>
+                    <span><MdOutlineKeyboardArrowRight/></span>
                     <div><p>Document    </p></div>
-                    <div><span><MdOutlineKeyboardArrowRight/></span></div>
+                    <span><MdOutlineKeyboardArrowRight/></span>
                     <div><p>Add Document</p></div>
                 </div>
             </div>
@@ -196,7 +197,7 @@ const index = () => {
                             </Form.Item>
                             
                             {   
-                              (editData[0]?.document_type == 1)&& showBack?
+                              (editData?.document_type == 1)&& showBack?
                               <div className='d-flex gap-3'>
                                 <div>
                                   <p >Upload front</p>

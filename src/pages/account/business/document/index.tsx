@@ -9,14 +9,13 @@ import { MdModeEditOutline } from "react-icons/md";
 
 const index = () => { 
     
-    const [documentData, setDocumentData] = useState<any>([]);
+    const [documentData, setDocumentData] = useState<any>({});
 
     const getDocumentData = async() =>{
       try {
           const apiRes = await henceforthApi.host.getHostDocumentData();
           const data = apiRes.data;
-          setDocumentData(data);
-          console.log("hostdocumentdata........",data);
+          setDocumentData(data[0]);
          
       } catch (error) {
           console.log("Error in getting document data",error)
@@ -28,7 +27,7 @@ const index = () => {
   
   
     const handleDocumentDelete = async() =>{
-      let id = documentData[0]?.id;
+      let id = documentData?.id;
       try {
           const apiRes = await henceforthApi.host.deleteHostDocument(id);
           getDocumentData();
@@ -55,11 +54,11 @@ const index = () => {
             <div className="col-7 ">
                 <div className='mb-4'><h4>Document</h4></div>
                 {
-                    documentData.length?
+                    documentData?
                     <div className='border p-4' style={{ width: "300px", height: "250px" }}>
                         <div className='d-flex justify-content-between'>
                            <div className="document-name">
-                              <p>{documentData[0]?.document_name}</p>
+                              <p>{documentData?.document_name}</p>
                            </div>
                            <div>
                               <p className='text-danger'>Not Verified</p>
@@ -67,22 +66,22 @@ const index = () => {
                         </div>
                        
                             {
-                              (documentData[0]?.document_type == 2)?
+                              (documentData?.document_type == 2)?
                                 <div className="image-container">
                                     <div>
-                                     <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData[0]?.document}` } alt="Document"/>
+                                     <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData?.document}` } alt="Document"/>
                                     </div>
                                 </div>
                                 :
                                 <div className='d-flex gap-3'>
                                     <div className="image-container">
                                         <div>
-                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData[0]?.document}` } alt="Document"/>
+                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData?.document}` } alt="Document"/>
                                         </div>
                                     </div> 
                                     <div className="image-container">
                                         <div>
-                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData[0]?.document_back}` } alt="Document"/>
+                                            <Image src={`https://demoserver3.sgp1.digitaloceanspaces.com/${documentData?.document_back}` } alt="Document"/>
                                         </div>
                                     </div>
                                 </div>
@@ -92,7 +91,7 @@ const index = () => {
                         
                         
                         <div className='document-btns  pt-3 w-100 d-flex  justify-content-between' >
-                            <Link className='btn btn-primary text-white shadow-none py-2 px-4' href={`/account/business/document/${documentData[0]?.id}/edit`} style={{backgroundColor:"#32cd32",border:"1px solid #32cd32"}}><span className='text-white px-2'><MdModeEditOutline /></span>Edit</Link>    
+                            <Link className='btn btn-primary text-white shadow-none py-2 px-4' href={`/account/business/document/${documentData?.id}/edit`} style={{backgroundColor:"#32cd32",border:"1px solid #32cd32"}}><span className='text-white px-2'><MdModeEditOutline /></span>Edit</Link>    
                             <div><button className='btn text-white d-flex py-2 px-3' style={{backgroundColor:'red'}} onClick={handleDocumentDelete}><span className=' px-2'><MdDelete/></span>Delete</button></div>
                         </div>
                     </div>
@@ -105,7 +104,7 @@ const index = () => {
             <div className="col-5">
                 <div className="add-btn text-end  me-5 ">
                     {
-                        documentData.length?""
+                        documentData?""
                         :
                         <Link className='btn btn-primary text-white shadow-none py-2 px-4' href = "/account/business/document/add" style={{backgroundColor:"#32cd32",border:"1px solid #32cd32",fontWeight:"500"}}>Add Document</Link>
                         // <button className='p-2 border-0 rounded' style={{backgroundColor:"#32CD32"}}><Link href="/account/business/document/add" className='text-white'>Add Document</Link></button>
@@ -119,7 +118,6 @@ const index = () => {
                         <div className="document-bottom"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus vel ligula vel leo gravida consequat. Nam turpis nisi, pulvinar eu lectus eu, imperdiet feugiat enim.</p></div>
                     </div>
                 </div>
-               
             </div>
         </div>
        </div> 

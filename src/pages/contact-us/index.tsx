@@ -4,6 +4,7 @@ import Layout from '@/components/Layout'
 import { Button, Form, Input, Select } from 'antd'
 import henceforthValidations from '@/utils/henceforthValidations'
 import country from "../country.json"
+import henceforthApi from '@/utils/henceforthApi'
 
 const index = () => {
 
@@ -17,6 +18,25 @@ const index = () => {
           </Select>
         </Form.Item>
       );
+
+    const handleContact = async(values:any) =>{
+        try {
+            let payload = {
+                name: values.name,
+                email: values.email,
+                country_code:values.country_code,
+                phone_number: values.phone_number,
+                subject: values.subject,
+                message: values.message,
+
+            }
+            console.log("form values........", values)
+            const apiRes = await henceforthApi.Auth.getInContact(payload);
+        } catch (error) {
+            console.log("error in contact form", error)
+        }
+    }
+
   return (
     <>
     <section>
@@ -34,7 +54,7 @@ const index = () => {
                     </div>
                 </div>
                 <div className="col-md-6 mb-3   ">
-                    <Form layout="vertical" autoComplete="off" >
+                    <Form layout="vertical" autoComplete="off" onFinish={handleContact} >
                         {/* name */}
                         <Form.Item name="name" label="Name" rules={[{required: true, message:"Please input your name!"}]}>
                             <Input placeholder='Enter name' size="large"/>
@@ -81,7 +101,7 @@ const index = () => {
                         </Form.Item>
 
                         {/* message */}
-                        <Form.Item name="message " label="Message">
+                        <Form.Item name="message" label="Message">
                             <Input.TextArea placeholder='Write your message'/>
                         </Form.Item>
                         

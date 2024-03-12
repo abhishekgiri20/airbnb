@@ -13,7 +13,7 @@ import { useRouter } from 'next/router';
 const index = () => {
   
 
-  const [editData, setEditData] = useState<any>([]);
+  const [editData, setEditData] = useState<any>({});
   const [oldFrontImage, setOldFrontImage] = useState<any>(null);
   const [oldBackImage, setOldBackImage] = useState<any>(null);
   const [newFrontImage, setNewFrontImage] = useState<any>(null);
@@ -25,13 +25,13 @@ const index = () => {
  
   const [form] = Form.useForm();
   const router = useRouter();
-  let id = editData[0]?.id;
+  let id = editData?.id;
  
-  const getUserData = async() =>{
+  const getUserDocumentData = async() =>{
         try {
             const apiRes = await henceforthApi.Auth.getDocumentData();
             const data = apiRes.data;
-            setEditData(data);
+            setEditData(data[0]);
             setOldFrontImage(data[0].document);
             setOldBackImage(data[0].document_back);
             if(data[0]?.document_type == 1){
@@ -41,15 +41,13 @@ const index = () => {
               issued_country: data[0]?.issued_country,
               document_type: data[0]?.document_name,
             });
-          console.log("host data....",data)
-          
         } catch (error) {
             console.log("error in get host data", error)
         }
   }
 
   useEffect(()=>{
-    getUserData();
+    getUserDocumentData();
   },[])
 
 
@@ -97,10 +95,11 @@ const index = () => {
 
   //handle user  edit document frorm upload
   const handleUserDocumentUpload = async(values:any) => {
+
    setShowSpin(true);
    let backImgResponse = "null";
    let document_name = "";
-   let frontImgResponse = await handleFrontImgUpload();
+   let frontImgResponse =  oldFrontImage ? oldFrontImage : await handleFrontImgUpload();
    if(values.document_type == 1){
         backImgResponse =  await handBackImgUpload();
         document_name = "aadhar card"
@@ -108,7 +107,7 @@ const index = () => {
     try {
       let payload = {
         issued_country: values.issued_country,
-        document_name:  document_name  ,
+        document_name:  document_name,
         document: frontImgResponse,
         document_type: values.document_type,
         document_back: backImgResponse,
@@ -127,8 +126,12 @@ const index = () => {
   const handleValueChange = (values:any) => {
       if(values.document_type == 1){
         setShowBack(true);  
-      }else  setShowBack(false);
-      console.log(values,"form value")
+        setEditData({...editData, document_type:1})
+      }else{
+        setShowBack(false);
+        setEditData({...editData, document_type:2})
+      } 
+      
    }
 
 
@@ -166,9 +169,9 @@ const index = () => {
             <div className="row">
                 <div className='d-flex gap-2' style={{marginTop:"150px"}}>
                     <div><Link href="/account/business/document" className='text-dark'>User Profile</Link></div>
-                    <div><span><MdOutlineKeyboardArrowRight/></span></div>
+                    <span><MdOutlineKeyboardArrowRight/></span>
                     <div><p>Document    </p></div>
-                    <div><span><MdOutlineKeyboardArrowRight/></span></div>
+                    <span><MdOutlineKeyboardArrowRight/></span>
                     <div><p>Add Document</p></div>
                 </div>
             </div>
@@ -195,7 +198,7 @@ const index = () => {
                             </Form.Item>
                             
                             {   
-                              (editData[0]?.document_type == 1)&& showBack?
+                              (editData?.document_type == 1)&& showBack?
                               <div className='d-flex gap-3'>
                                 <div>
                                   <p >Upload front</p>
@@ -204,7 +207,7 @@ const index = () => {
                                      (
                                        <div style={{height:"200px",width:"310px", margin:"10px 0 48px 0"}}>
                                          <img src={`https://demoserver3.sgp1.digitaloceanspaces.com/${oldFrontImage}`} alt="" className='w-100 h-100 img-fluid object-fit-cover position-relative ' />
-                                         <span className='frontImg position-absolute text-danger' style={{left:"280px",zIndex:"2"}} onClick={()=>handleImageShown(2)}><ImCross /></span>
+                                         <span className='frontImg position-absolute text-danger' style={{left:"293px",zIndex:"2"}} onClick={()=>handleImageShown(2)}><ImCross /></span>
                                        </div>  
                                      ):
                                      (
@@ -212,7 +215,7 @@ const index = () => {
                                          (
                                            <div style={{height:"200px",width:"310px", margin:"10px 0 48px 0"}}>
                                              <img src={URL.createObjectURL(newFrontImage)} alt="" className='w-100 h-100 img-fluid object-fit-cover position-relative ' />
-                                             <span className='frontImg position-absolute text-danger' style={{left:"280px",zIndex:"2"}} onClick={()=>handleImageShown(2)}><ImCross /></span>
+                                             <span className='frontImg position-absolute text-danger' style={{left:"293px",zIndex:"2"}} onClick={()=>handleImageShown(2)}><ImCross /></span>
                                            </div>  
                                          ) :
                                          (
@@ -232,17 +235,17 @@ const index = () => {
                                   {
                                     oldBackImage?
                                     (
-                                      <div style={{height:"200px", margin:"10px 0 48px 0"}}>
+                                      <div style={{height:"200px",width:"310px", margin:"10px 0 48px 0"}}>
                                          <img src={`https://demoserver3.sgp1.digitaloceanspaces.com/${oldBackImage}`} alt="" className='w-100 h-100 object-fit-cover position-relative ' />
-                                         <span className='frontImg position-absolute text-danger' style={{left:"600",zIndex:"2"}} onClick={()=>handleImageShown(1)}><ImCross /></span>
+                                         <span className='frontImg position-absolute text-danger' style={{left:"620px",zIndex:"2"}} onClick={()=>handleImageShown(1)}><ImCross /></span>
                                        </div> 
                                     ) :
                                     (
                                       newBackImage?
                                       (
-                                        <div style={{height:"200px", margin:"10px 0 48px 0"}}>
+                                        <div style={{height:"200px",width:"310px", margin:"10px 0 48px 0"}}>
                                         <img src={URL.createObjectURL(newBackImage)} alt="" className='w-100 h-100 object-fit-cover position-relative ' />
-                                        <span className='frontImg position-absolute text-danger' style={{left:"600px",zIndex:"2"}} onClick={()=>handleImageShown(1)}><ImCross /></span>
+                                        <span className='frontImg position-absolute text-danger' style={{left:"620px",zIndex:"2"}} onClick={()=>handleImageShown(1)}><ImCross /></span>
                                       </div>  
                                       ) :
                                       (
@@ -308,3 +311,6 @@ index.getLayout =  function getLayout(page:any){
     return <Layout>{page}</Layout>
 }
 export default index;
+
+
+
